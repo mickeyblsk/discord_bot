@@ -5,8 +5,8 @@ from typing import Final
 
 import discord
 
-MESSAGE_CONTENT: Final[str] = "大家晚安，這是本週三的自動提醒！"
-REACTION_EMOJI: Final[str] = "✅"
+MESSAGE_CONTENT: Final[str] = "每週打波時間"
+REACTION_EMOJIS: Final[list[str]] = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"]
 
 logging.basicConfig(
     level=logging.INFO,
@@ -51,13 +51,14 @@ class ReminderBot(discord.Client):
             await self.close()
             return
 
-        try:
-            await message.add_reaction(REACTION_EMOJI)
-            logger.info("已成功在訊息上新增 Reaction: %s", REACTION_EMOJI)
-        except discord.Forbidden:
-            logger.warning("Bot 沒有新增 Reaction 的權限，已跳過此步驟")
-        except Exception as e:
-            logger.warning("新增 Reaction 時發生錯誤: %s，已跳過此步驟", e)
+        for emoji in REACTION_EMOJIS:
+            try:
+                await message.add_reaction(emoji)
+                logger.info("已成功新增 Reaction: %s", emoji)
+            except discord.Forbidden:
+                logger.warning("Bot 沒有新增 Reaction 的權限，已跳過 %s", emoji)
+            except Exception as e:
+                logger.warning("新增 Reaction %s 時發生錯誤: %s，已跳過此步驟", emoji, e)
 
         await self.close()
 
