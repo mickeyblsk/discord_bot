@@ -1,0 +1,239 @@
+請幫我建立一個完整可運行的 Python 專案，用於透過 GitHub Actions 定時發送 Discord 訊息。
+
+## 專案目標
+
+每週三晚上 22:00（台灣時間 UTC+8），自動在指定的 Discord 頻道發送一則訊息，然後由 Bot 自己對該訊息新增一個 Emoji Reaction。
+
+此專案將部署在 GitHub Repository 中，透過 GitHub Actions 的 Schedule Trigger 自動執行，不需要任何 VPS 或長駐服務。
+
+---
+
+## 技術要求
+
+### Python
+
+使用 Python 3.12
+
+### Discord
+
+使用 discord.py
+
+### CI/CD
+
+使用 GitHub Actions
+
+### Secrets
+
+所有敏感資訊必須透過 GitHub Secrets 提供，不允許硬編碼於程式碼中。
+
+---
+
+## Discord 功能需求
+
+### 發送訊息
+
+在指定頻道發送訊息：
+
+「大家晚安，這是本週三的自動提醒！」
+
+請將訊息內容抽離成變數，方便未來修改。
+
+### 新增 Reaction
+
+訊息成功送出後，由 Bot 自己新增：
+
+✅
+
+Reaction
+
+流程如下：
+
+1. 發送訊息
+2. 取得 Message Object
+3. 對該 Message 執行 add_reaction("✅")
+
+---
+
+## GitHub Secrets
+
+程式必須從環境變數讀取：
+
+DISCORD_TOKEN
+DISCORD_CHANNEL_ID
+
+範例：
+
+DISCORD_TOKEN=xxxxxxxx
+DISCORD_CHANNEL_ID=123456789012345678
+
+不可將 Token 寫死在程式中。
+
+---
+
+## GitHub Actions 需求
+
+建立：
+
+.github/workflows/discord-reminder.yml
+
+### 觸發方式
+
+必須同時支援：
+
+1. 排程執行
+2. 手動執行
+
+範例：
+
+on:
+workflow_dispatch:
+
+schedule:
+- cron: '0 14 * * 3'
+
+說明：
+
+GitHub Actions 使用 UTC 時區
+
+UTC 14:00 = 台灣時間 UTC+8 的 22:00
+
+每週三執行一次
+
+---
+
+## 執行流程
+
+Workflow 執行時：
+
+1. Checkout Repository
+2. 安裝 Python 3.12
+3. 安裝 requirements.txt
+4. 執行主程式
+
+---
+
+## 專案結構
+
+請產生完整結構：
+
+.
+├── .github
+│   └── workflows
+│       └── discord-reminder.yml
+│
+├── src
+│   └── main.py
+│
+├── requirements.txt
+│
+├── .gitignore
+│
+└── README.md
+
+---
+
+## main.py 要求
+
+### 使用 async/await
+
+### 使用 discord.Client
+
+或
+
+discord.ext.commands.Bot
+
+均可
+
+### 執行流程
+
+啟動
+↓
+登入 Discord
+↓
+取得指定頻道
+↓
+發送訊息
+↓
+新增 Reaction
+↓
+正常關閉 Client
+↓
+程式結束
+
+---
+
+## 錯誤處理
+
+請加入：
+
+### 找不到頻道
+
+輸出明確錯誤訊息
+
+### Token 錯誤
+
+輸出明確錯誤訊息
+
+### 發送失敗
+
+捕捉 Exception 並輸出 Log
+
+### Reaction 新增失敗
+
+捕捉 Exception 並輸出 Log
+
+---
+
+## README.md
+
+請撰寫完整 README，包含：
+
+### 建立 Discord Bot
+
+### 如何取得 Bot Token
+
+### 如何取得 Channel ID
+
+### 如何邀請 Bot 進伺服器
+
+需要的權限：
+
+* View Channel
+* Send Messages
+* Add Reactions
+* Read Message History
+
+### GitHub Secrets 設定方式
+
+DISCORD_TOKEN
+
+DISCORD_CHANNEL_ID
+
+### 手動測試方式
+
+### GitHub Actions 自動排程說明
+
+---
+
+## 程式碼品質要求
+
+* 使用型別註解（type hints）
+* 適當函式拆分
+* 不要寫成單一巨大函式
+* 加入必要註解
+* 使用 logging 模組而不是 print
+* 符合 Python 最佳實務
+
+---
+
+## 輸出要求
+
+請直接輸出：
+
+1. 完整檔案樹
+2. 每個檔案的完整內容
+3. requirements.txt
+4. GitHub Actions YAML
+5. README
+
+不要只提供範例片段，請提供可直接運行的完整專案。
