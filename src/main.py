@@ -5,7 +5,7 @@ from typing import Final
 
 import discord
 
-MESSAGE_CONTENT: Final[str] = "每週打波時間"
+MESSAGE_CONTENT: Final[str] = "這週打波時間"
 REACTION_EMOJIS: Final[list[str]] = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"]
 
 logging.basicConfig(
